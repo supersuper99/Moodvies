@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 interface TmdbResponse {
   results: any[];
@@ -24,10 +25,17 @@ export class HomePage implements OnInit {
     'comedic',
     'dramatic',
     'action-packed',
+    'mysterious',
+    'thrilling',
   ];
   movie: any;
+  isLoading = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
+  ) {}
 
   ngOnInit() {
     this.moodForm = new FormGroup({
@@ -36,20 +44,29 @@ export class HomePage implements OnInit {
   }
 
   async suggestMovie() {
+    this.isLoading = true;
+    const loading = await this.loadingCtrl.create({
+      message: 'Suggesting a movie...',
+    });
+    await loading.present();
+
     const mood = this.moodForm.value.mood;
     const tmdbApiKey = 'YOUR_TMDB_API_KEY';
     const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${tmdbApiKey}&sort_by=popularity.desc&with_genres=${this.getGenreIdFromMood(mood)}`;
     this.http.get<TmdbResponse>(tmdbUrl).subscribe(
       (res: TmdbResponse) => {
         this.movie = res.results[0];
+        this.isLoading = false;
+        loading.dismiss();
       },
       (err) => {
         console.error(err);
+        this.isLoading = false;
+        loading.dismiss();
+        this.showErrorToast();
       }
     );
   }
-
-
   getGenreIdFromMood(mood: string) {
     switch (mood) {
       case 'happy':
@@ -72,8 +89,21 @@ export class HomePage implements OnInit {
         return 18; // Drama
       case 'action-packed':
         return 28; // Action
+      case 'mysterious':
+        return 9648; // Mystery
+      case 'thrilling':
+        return 53; // Thriller
       default:
         return 0;
     }
+  }
+
+  async showErrorToast() {
+    const toast = await this.toastCtrl.create({
+      message: 'Sorry, something went wrong. Please try again later.',
+      duration: 3000,
+      color: 'danger',
+    });
+    toast.present();
   }
 }
