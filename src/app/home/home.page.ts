@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  moodForm: FormGroup;
+  moodForm!: FormGroup;
   moods = [
     'happy',
     'sad',
@@ -40,6 +40,33 @@ export class HomePage implements OnInit {
       this.movie = res.results[0];
     } catch (err) {
       console.error(err);
+    }
+  }
+
+  getGenreIdFromMood(mood: string) {
+    switch (mood) {
+      case 'happy':
+        return 35; // Comedy
+      case 'sad':
+        return 18; // Drama
+      case 'romantic':
+        return 10749; // Romance
+      case 'adventurous':
+        return 12; // Adventure
+      case 'exciting':
+        return 28; // Action
+      case 'relaxing':
+        return 16; // Animation
+      case 'thought-provoking':
+        return 878; // Science Fiction
+      case 'comedic':
+        return 35; // Comedy
+      case 'dramatic':
+        return 18; // Drama
+      case 'action-packed':
+        return 28; // Action
+      default:
+        return 0;
     }
   }
 }
