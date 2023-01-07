@@ -17,5 +17,14 @@
 
     <ion-button type="submit" [disabled]="!moodForm.valid">Suggest a movie</ion-button>
   </form>
-  
+
+  <ion-card *ngIf="movie">
+    <ion-card-header>
+      <ion-card-title>{{ movie.title }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-img [src]="'https://image.tmdb.org/t/p/w500/' + movie.poster_path"></ion-img>
+      <p>{{ movie.overview }}</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
