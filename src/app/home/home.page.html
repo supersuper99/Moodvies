@@ -1,20 +1,21 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>
-      Blank
+      Mood Movie Suggestor
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <form [formGroup]="moodForm" (ngSubmit)="suggestMovie()">
+    <ion-item>
+      <ion-label>What mood are you in?</ion-label>
+      <ion-select formControlName="mood">
+        <ion-select-option *ngFor="let mood of moods" [value]="mood">{{ mood }}</ion-select-option>
+      </ion-select>
+    </ion-item>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+    <ion-button type="submit" [disabled]="!moodForm.valid">Suggest a movie</ion-button>
+  </form>
+  
 </ion-content>
