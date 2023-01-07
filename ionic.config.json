@@ -1,0 +1,7 @@
+{
+  "name": "Moodvies",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
