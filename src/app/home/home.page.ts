@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
+interface TmdbResponse {
+  results: any[];
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -35,13 +39,16 @@ export class HomePage implements OnInit {
     const mood = this.moodForm.value.mood;
     const tmdbApiKey = 'YOUR_TMDB_API_KEY';
     const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${tmdbApiKey}&sort_by=popularity.desc&with_genres=${this.getGenreIdFromMood(mood)}`;
-    try {
-      const res = await this.http.get(tmdbUrl).toPromise();
-      this.movie = res.results[0];
-    } catch (err) {
-      console.error(err);
-    }
+    this.http.get<TmdbResponse>(tmdbUrl).subscribe(
+      (res: TmdbResponse) => {
+        this.movie = res.results[0];
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
   }
+
 
   getGenreIdFromMood(mood: string) {
     switch (mood) {
