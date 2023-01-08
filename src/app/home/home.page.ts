@@ -55,7 +55,7 @@ export class HomePage implements OnInit {
     const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${tmdbApiKey}&sort_by=popularity.desc&with_genres=${this.getGenreIdFromMood(mood)}`;
     this.http.get<TmdbResponse>(tmdbUrl).subscribe(
       (res: TmdbResponse) => {
-        this.movie = res.results[0];
+        this.movie = res.results[Math.floor(Math.random() * res.results.length)];
         this.isLoading = false;
         loading.dismiss();
       },
