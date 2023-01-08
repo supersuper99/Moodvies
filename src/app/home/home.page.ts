@@ -51,7 +51,7 @@ export class HomePage implements OnInit {
     await loading.present();
 
     const mood = this.moodForm.value.mood;
-    const tmdbApiKey = 'YOUR_TMDB_API_KEY';
+    const tmdbApiKey = '1481c4774a185720f42198e8a1259e57';
     const tmdbUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${tmdbApiKey}&sort_by=popularity.desc&with_genres=${this.getGenreIdFromMood(mood)}`;
     this.http.get<TmdbResponse>(tmdbUrl).subscribe(
       (res: TmdbResponse) => {
